@@ -1,0 +1,200 @@
+\documentclass[aspectratio=169,11pt,hyperref={colorlinks=true}]{beamer}
+\usetheme{boxes}
+\setbeamertemplate{navigation symbols}{}
+\definecolor{openstack}{RGB}{149,0,4}
+\setbeamercolor{titlelike}{fg=openstack}
+\setbeamercolor{structure}{fg=openstack}
+\hypersetup{colorlinks,urlcolor=openstack}
+\setbeamertemplate{footline}[frame number]
+% Inserting graphics
+\usepackage{graphicx}
+% Side-by-side figures, etc
+\usepackage{subfigure}
+% Code snippits
+\usepackage{listings}
+% Color stuff
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{tikz}
+\newcommand\RBox[1]{%
+  \tikz\node[draw,rounded corners,align=center,] {#1};%
+}
+\usepackage{hyperref}
+%\usecolortheme{buzz}
+%\usecolortheme{wolverine}
+%\usetheme{Boadilla}
+\usepackage[T1]{fontenc}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{%
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{openstack},  % comment style
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+%  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stringstyle=\color{openstack},   % string literal style
+}
+
+\setbeamerfont{caption}{series=\normalfont,size=\fontsize{6}{8}}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\floatsep}{0pt}
+
+\author[Matthew Treinish, Masayuki Igawa]{%
+    \texorpdfstring{%
+        \centering
+        Matthew Treinish\\
+        \href{mailto:mtreinish@kortar.org}{mtreinish@kortar.org}\\
+        \texttt{mtreinish on Freenode}
+   }
+   {Matthew Treinish}\\
+   \texorpdfstring{%
+       \centering
+       Masayuki Igawa\\
+       \href{mailto:masayuki.igawa@gmail.com}{masayuki.igawa@gmail.com}\\
+       \texttt{masayukig on Freenode}
+  }
+  {Masayuki Igawa}
+}
+\date{July 13, 2016}
+
+\title[Better Testing Through Statistics
+\hspace{2em}\insertframenumber/\inserttotalframenumber]{Better Testing Through Statistics}
+
+\begin{document}
+
+{%
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{background_title.png}}
+\setbeamertemplate{footline}{}
+\begin{frame}[noframenumbering]
+    \setbeamercolor{titlelike}{fg=white}
+    \setbeamercolor{structure}{fg=white}
+    \setbeamercolor{normal text}{fg=white}
+    \hypersetup{colorlinks,urlcolor=white}
+    \setbeamercolor{author}{fg=white}
+    \setbeamercolor{date}{fg=white}
+    \setbeamercolor{background}{bg=openstack}
+    \titlepage{}
+    \centering
+    \href{https://github.com/masayukig/better-testing-through-statistics}{https://github.com/masayukig/better-testing-through-statistics}
+\end{frame}
+}
+
+\section{What is "the OpenStack Gate"?}
+\begin{frame}
+    \frametitle{What is "the OpenStack Gate"?}
+	\begin{center}
+		\includegraphics[width=.65\textwidth]{code_review.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{What Happens when you push a change?}
+\begin{center}
+	\includegraphics[width=.7\textwidth]{jobs.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+    \includegraphics[width=.8\textwidth]{ZuulStatus.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Size of the Gate}
+    \begin{columns}[T]
+        \begin{column}{.48\textwidth}
+            \textbf{One Proposed Change Generates:}
+			\begin{itemize}
+				\item 5--25 Devstacks
+				\item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
+                \item \textasciitilde150 2nd level guests created in devstack cloud
+                \item \textasciitilde1 GB of logs uncompressed for each run
+			\end{itemize}
+            \textbf{In aggregate:}
+            \begin{itemize}
+                \item \textasciitilde12,500 jobs run in check and gate daily
+                \item \textasciitilde0.01\% individual tempest test failure rate
+                \item \textasciitilde.77\% tempest run failure rate
+            \end{itemize}
+        \end{column}
+        \begin{column}{.48\textwidth}
+            \centering
+            \textbf{Number of Tempest Tests per Day in the Gate Queue:}
+            \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\subsection{Issues/Problem/Pain point}
+\begin{frame}
+    \frametitle{Issues/Problem/Pain point}
+    \begin{itemize}
+        \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
+        \item xxxxxxxx
+    \end{itemize}
+\end{frame}
+
+\section{What did we do for?}
+\begin{frame}
+    \frametitle{What did we do for?}
+    \begin{itemize}
+        \item Logstash and elastic-recheck
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Analyzing with openstack-health/subunit2sql}
+    \begin{itemize}
+        \item xxxxxxxx
+    \end{itemize}
+\end{frame}
+
+\section{Result}
+\begin{frame}
+    \frametitle{What did we get/improve?}
+    \begin{itemize}
+        \item xxxxxxxx
+    \end{itemize}
+\end{frame}
+
+\section{Future work/issues}
+\begin{frame}
+    \frametitle{Future work/issues}
+    \begin{itemize}
+        \item xxxxxxxx
+    \end{itemize}
+\end{frame}
+
+\subsection{More Information}
+\begin{frame}
+\frametitle{Where to get more information}
+    \begin{itemize}
+        \item openstack-dev ML\: \href{mailto:openstack-dev@lists.openstack.org}{openstack-dev@lists.openstack.org}
+        \item \#openstack-qa on Freenode
+        \item \href{http://git.openstack.org/cgit/openstack/openstack-health/}{http://git.openstack.org/cgit/openstack/openstack-health/}
+        \item \href{http://git.openstack.org/cgit/openstack-infra/subunit2sql}{http://git.openstack.org/cgit/openstack-infra/subunit2sql}
+    \end{itemize}
+\end{frame}
+
+\section{Questions}
+\begin{frame}
+\frametitle{Questions?}
+\end{frame}
+
+\end{document}

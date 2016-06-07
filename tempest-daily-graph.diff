@@ -1,0 +1,105 @@
+diff --git a/subunit2sql/analysis/dailycount.py b/subunit2sql/analysis/dailycount.py
+index 7f7405a..9ecc44c 100644
+--- a/subunit2sql/analysis/dailycount.py
++++ b/subunit2sql/analysis/dailycount.py
+@@ -12,7 +12,10 @@
+ # License for the specific language governing permissions and limitations
+ # under the License.
+ 
++import datetime
++
+ import matplotlib
++import matplotlib.dates as dates
+ import matplotlib.pyplot as plt
+ from oslo_config import cfg
+ import pandas as pd
+@@ -22,7 +25,7 @@ from subunit2sql.db import api
+ 
+ CONF = cfg.CONF
+ 
+-matplotlib.style.use('ggplot')
++#matplotlib.style.use('ggplot')
+ 
+ 
+ def set_cli_opts(parser):
+@@ -30,24 +33,43 @@ def set_cli_opts(parser):
+ 
+ 
+ def generate_series():
++    if CONF.start_date:
++        start_date = datetime.datetime.strptime(CONF.start_date, '%Y-%m-%d')
++    else:
++        start_date = None
++    if CONF.stop_date:
++        stop_date = datetime.datetime.strptime(CONF.stop_date, '%Y-%m-%d')
++    else:
++        stop_date = None
+     session = api.get_session()
+-    test_starts = api.get_test_run_series(session)
++    test_starts = api.get_test_run_series(start_date=start_date,
++                                          stop_date=stop_date,
++                                          session=session)
+     session.close()
+-    ts = pd.Series(test_starts).resample('D', how='sum')
++    ts = pd.Series(test_starts)
++    ts = ts.resample('D').sum()
+     daily_count = utils.filter_dates(ts)
+     mean = pd.rolling_mean(daily_count, 10)
+     rolling_std = pd.rolling_std(daily_count, 10)
+     plt.figure()
+-    title = CONF.title or 'Number of tests run'
++    title = CONF.title or 'Number of Tempest Tests run in the Gate Queue'
+     plt.title(title)
+     plt.ylabel('Number of tests')
+-    plt.plot(daily_count.index, daily_count, 'k', label='Daily Test Count')
+-    plt.plot(mean.index, mean, 'b', label='Avg. Daily Test Count')
++    fig, ax = plt.subplots(1)
++    fig.autofmt_xdate()
++    xfmt = dates.DateFormatter("%b %d %Y")
++    ax.xaxis_date()
++    ax.xaxis.set_major_formatter(xfmt)
++
++    plt.plot(daily_count.index[10:], daily_count[10:], 'k', label='Daily Test Count')
++    plt.plot(mean.index[10:], mean[10:], 'b', label='Avg. Daily Test Count')
+     upper_std_dev = mean + 2 * rolling_std
+     lower_std_dev = mean - 2 * rolling_std
+     # Set negative numbers to 0
+     lower_std_dev[lower_std_dev < 0] = 0
+-    plt.fill_between(rolling_std.index, lower_std_dev, upper_std_dev,
+-                     color='b', alpha=0.2, label='std dev')
++    plt.fill_between(rolling_std.index[10:], lower_std_dev[10:],
++                     upper_std_dev[10:],
++                     color='b', alpha=0.2, label='Std Dev')
+     plt.legend()
+-    plt.savefig(CONF.output)
++#    plt.tightlayout()
++    plt.savefig(CONF.output, dpi=900)
+diff --git a/subunit2sql/db/api.py b/subunit2sql/db/api.py
+index ad3fbe8..8f4e51b 100644
+--- a/subunit2sql/db/api.py
++++ b/subunit2sql/db/api.py
+@@ -1003,16 +1003,20 @@ def get_test_run_series(start_date=None, stop_date=None, session=None,
+     session = session or get_session()
+     full_query = db_utils.model_query(models.Run, session=session)
+     if key and value:
+-        full_query = full_query.join(
++        full_query = session.query(models.Run.id)
++        sub_query = full_query.join(
+             models.RunMetadata,
+             models.Run.id == models.RunMetadata.run_id).filter_by(
+                 key=key, value=value)
+ 
+     # Process date bounds
+-    full_query = _filter_runs_by_date(full_query, start_date, stop_date)
++    sub_query = _filter_runs_by_date(sub_query, start_date, stop_date).subquery()
+ 
+-    query = full_query.values(models.Run.run_at, models.Run.passes,
+-                              models.Run.fails)
++    query = db_utils.model_query(models.Run, session=session).filter(
++        models.Run.id.in_(sub_query)).join(models.RunMetadata, models.Run.id == models.RunMetadata.run_id).filter(
++            models.RunMetadata.key == 'build_name', models.RunMetadata.value.like('%tempest%'))
++    query = query.values(models.Run.run_at, models.Run.passes,
++                         models.Run.fails)
+     time_series = {}
+     for test_run in query:
+         start_time = test_run[0]
