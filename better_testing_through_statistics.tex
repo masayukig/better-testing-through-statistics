@@ -124,7 +124,7 @@
 			\begin{itemize}
 				\item 5--25 Devstacks
 				\item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
-                \item \textasciitilde150 2nd level guests created in devstack cloud
+                \item \textasciitilde151 2nd level guests created in each devstack cloud
                 \item \textasciitilde1 GB of logs uncompressed for each run
 			\end{itemize}
             \textbf{In aggregate:}
@@ -157,6 +157,11 @@
     \frametitle{Graphite}
     \begin{itemize}
         \item \href{http://graphite.openstack.org/}{http://graphite.openstack.org/}
+        \item Infra services report to graphite
+        \item Include job results
+        \item Limited to job level data
+        \item Time based, cant' be linked to an individual job
+        \item
     \end{itemize}
 \end{frame}
 
@@ -164,7 +169,10 @@
 \begin{frame}
     \frametitle{ELK}
     \begin{itemize}
-        \item Logstash
+        \item Elasticsearch, Logstash, Kibana
+        \item \href{http://logstash.openstack.org}{http://logstash.openstack.org}
+        \item Provides a search engine on top of are job artifacts
+        \item Limited to 10 days of results
     \end{itemize}
 \end{frame}
 
@@ -173,6 +181,7 @@
     \begin{itemize}
         \item Designed to answer the question "Have you seen this recently?"
         \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
+        \item 
     \end{itemize}
 \end{frame}
 
@@ -180,20 +189,36 @@
     \frametitle{Grafana}
     \begin{itemize}
         \item \href{http://grafana.openstack.org/}{http://grafana.openstack.org/}
+        \item Provides a layer on top of graphite to easily make useful visualizations
+        \item Adds a number of dashboards
+        \item Some projects using this to track job failure rates
     \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{subunit2sql}
     \begin{itemize}
-        \item xxxxxxxx
+        \item Designed to store test results data in a sql database
+        \item Provides a DB schema and a python API for interacting with the
+              database
+        \item Used to the results from test runs for 6 months
+        \item 
     \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{subunit2sql in OpenStack Infrastructure}
+    \begin{center}
+        \includegraphics[height=1.1\textheight]{subunit2sql-collection.png}
+    \end{center}
 \end{frame}
 
 \begin{frame}
     \frametitle{openstack-health}
     \begin{itemize}
         \item \href{http://status.openstack.org/openstack-health/\#/}{http://status.openstack.org/openstack-health/\#/}
+        \item Designed to be a single point of access for all the data about the gate
+        \item Currently can leverage subunit2sql and elastic-recheck
     \end{itemize}
 \end{frame}
 
@@ -208,15 +233,25 @@
 \begin{frame}
     \frametitle{What did we get/improve?}
     \begin{itemize}
-        \item xxxxxxxx
+        \item 
     \end{itemize}
 \end{frame}
 
 \section{Future work/issues}
+
 \begin{frame}
-    \frametitle{Future work/issues}
+    \frametitle{Issues}
     \begin{itemize}
-        \item xxxxxxxx
+        \item Too many varied data sources each with unique limitations
+        \item 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Future work}
+    \begin{itemize}
+        \item Integrate all the things in openstack-health
+        \item 
     \end{itemize}
 \end{frame}
 
