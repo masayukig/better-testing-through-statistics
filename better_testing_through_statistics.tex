@@ -95,9 +95,9 @@
 \end{frame}
 }
 
-\section{What is "the OpenStack Gate"?}
+\section{What is \"the OpenStack Gate\"?}
 \begin{frame}
-    \frametitle{What is "the OpenStack Gate"?}
+    \frametitle{What is \"the OpenStack Gate\"?}
 	\begin{center}
 		\includegraphics[width=.65\textwidth]{code_review.png}
 	\end{center}
@@ -142,29 +142,60 @@
     \end{columns}
 \end{frame}
 
-\subsection{Issues/Problem/Pain point}
+\subsection{Complications with the Size}
 \begin{frame}
-    \frametitle{Issues/Problem/Pain point}
+    \frametitle{Log Server}
     \begin{itemize}
         \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
-        \item xxxxxxxx
-    \end{itemize}
-\end{frame}
-
-\section{What did we do for?}
-\begin{frame}
-    \frametitle{What did we do for?}
-    \begin{itemize}
-        \item Logstash and elastic-recheck
+        \item Archive of all artifacts from all jobs for \~4 months
+%http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=717&rra_id=all
+        \item \~8 TB of data compressed
     \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Analyzing with openstack-health/subunit2sql}
+    \frametitle{Graphite}
+    \begin{itemize}
+        \item \href{http://graphite.openstack.org/}{http://graphite.openstack.org/}
+    \end{itemize}
+\end{frame}
+
+\section{Solutions to Size issues}
+\begin{frame}
+    \frametitle{ELK}
+    \begin{itemize}
+        \item Logstash
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Elastic Recheck}
+    \begin{itemize}
+        \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Grafana}
+    \begin{itemize}
+        \item \href{http://grafana.openstack.org/}{http://grafana.openstack.org/}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{subunit2sql}
     \begin{itemize}
         \item xxxxxxxx
     \end{itemize}
 \end{frame}
+
+\begin{frame}
+    \frametitle{openstack-health}
+    \begin{itemize}
+        \item \href{http://status.openstack.org/openstack-health/\#/}{http://status.openstack.org/openstack-health/\#/}
+    \end{itemize}
+\end{frame}
+
 
 \section{Result}
 \begin{frame}
@@ -190,6 +221,7 @@
         \item \#openstack-qa on Freenode
         \item \href{http://git.openstack.org/cgit/openstack/openstack-health/}{http://git.openstack.org/cgit/openstack/openstack-health/}
         \item \href{http://git.openstack.org/cgit/openstack-infra/subunit2sql}{http://git.openstack.org/cgit/openstack-infra/subunit2sql}
+        \item \href{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}
     \end{itemize}
 \end{frame}
 
