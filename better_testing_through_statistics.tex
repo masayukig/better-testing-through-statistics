@@ -14,6 +14,8 @@
 \usepackage{listings}
 % Color stuff
 \usepackage{color}
+% for ul
+\usepackage{soul}
 \usepackage{amsmath}
 \usepackage{tikz}
 \newcommand\RBox[1]{%
@@ -97,10 +99,30 @@
 
 \section{What is ``the OpenStack''?}
 \begin{frame}
-    \frametitle{What is ``the OpenStack''?}
-	\begin{center}
-		\includegraphics[width=.65\textwidth]{code_review.png}
-	\end{center}
+  \frametitle{What is ``the OpenStack''?}
+  \begin{itemize}
+    \item Open Source Cloud Software: Apache License Version 2.0
+    \item consists of a lot of projects: \href{http://governance.openstack.org/reference/projects/index.html}{57 projects}
+    \item released every 6 month: Latest version is called `Mitaka'
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.65\textwidth]{openstack-software-diagram.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is ``the OpenStack QA''}
+  \begin{itemize}
+    \item An official OpenStack project team
+    \item \href{https://wiki.openstack.org/wiki/QA}{\ul{Develop, maintain,
+      and initiate tools and plans to ensure the upstream stability
+      and quality of OpenStack, and its release readiness at any point
+      during the release cycle.}}
+    \item \href{http://governance.openstack.org/reference/projects/quality-assurance.html}{17 repositories (2016/7/8)}
+    \begin{itemize}
+      \item Tempest, DevStack, os-testr, openstack-health, stackviz, Grenade, Hacking, Bashate, etc..
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \section{What is ``the OpenStack Gate''?}
@@ -126,82 +148,107 @@
 
 \begin{frame}
 \frametitle{The Size of the Gate}
-    \begin{columns}[T]
-        \begin{column}{.48\textwidth}
-            \textbf{One Proposed Change Generates:}
-			\begin{itemize}
-				\item 5--25 Devstacks
-				\item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
-                \item \textasciitilde151 2nd level guests created in each devstack cloud
-                \item \textasciitilde1 GB of logs uncompressed for each run
-			\end{itemize}
-            \textbf{In aggregate:}
-            \begin{itemize}
-                \item \textasciitilde12,500 jobs run in check and gate daily
-                \item \textasciitilde0.01\% individual tempest test failure rate
-                \item \textasciitilde.77\% tempest run failure rate
-            \end{itemize}
-        \end{column}
-        \begin{column}{.48\textwidth}
-            \centering
-            \textbf{Number of Tempest Tests per Day in the Gate Queue:}
-            \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
-        \end{column}
-    \end{columns}
+  \begin{columns}[T]
+    \begin{column}{.48\textwidth}
+      \textbf{One Proposed Change Generates:}
+      \begin{itemize}
+        \item 5--25 Devstacks
+        \item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
+        \item \textasciitilde151 2nd level guests created in each devstack cloud
+        \item \textasciitilde1 GB of logs uncompressed for each run
+      \end{itemize}
+      \textbf{In aggregate:}
+      \begin{itemize}
+        \item \textasciitilde12,500 jobs run in check and gate daily
+        \item \textasciitilde0.01\% individual tempest test failure rate
+        \item \textasciitilde.77\% tempest run failure rate
+      \end{itemize}
+    \end{column}
+    \begin{column}{.48\textwidth}
+      \centering
+      \textbf{Number of Tempest Tests per Day in the Gate Queue:}
+      \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \subsection{Complications with the Size}
 \begin{frame}
-    \frametitle{Log Server}
-    \begin{itemize}
-        \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
-        \item Archive of all artifacts from all jobs for \~4 months
+  \frametitle{Log Server}
+  \begin{itemize}
+    \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
+    \item Archive of all artifacts from all jobs for \textasciitilde4 months
 %http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=717&rra_id=all
-        \item \~8 TB of data compressed
-    \end{itemize}
+    \item \textasciitilde8 TB of data compressed
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.55\textwidth]{cacti-static-openstack-org-log-graph.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Graphite}
-    \begin{itemize}
-        \item \href{http://graphite.openstack.org/}{http://graphite.openstack.org/}
-        \item Infra services report to graphite
-        \item Include job results
-        \item Limited to job level data
-        \item Time based, cant' be linked to an individual job
-        \item
-    \end{itemize}
+  \frametitle{Problem/Issue}
+  \begin{itemize}
+    \item It's difficult to find a problem from the large amount of log
+    \item It's difficult to find performance regression/improvement
+    \item
+  \end{itemize}
 \end{frame}
 
 \section{Solutions to Size issues}
 \begin{frame}
-    \frametitle{ELK}
-    \begin{itemize}
-        \item Elasticsearch, Logstash, Kibana
-        \item \href{http://logstash.openstack.org}{http://logstash.openstack.org}
-        \item Provides a search engine on top of are job artifacts
-        \item Limited to 10 days of results
-    \end{itemize}
+  \frametitle{Graphite}
+  \begin{itemize}
+    \item \href{http://graphite.openstack.org/}{http://graphite.openstack.org/}
+    \item Infra services report to graphite
+    \item Include job results
+    \item Limited to job level data
+    \item Time based, can't be linked to an individual job
+    \item
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.65\textwidth]{graphite-sample.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Elastic Recheck}
-    \begin{itemize}
-        \item Designed to answer the question ``Have you seen this recently?''
-        \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
-        \item
-    \end{itemize}
+  \frametitle{Grafana}
+  \begin{itemize}
+    \item \href{http://grafana.openstack.org/}{http://grafana.openstack.org/}
+    \item Provides a layer on top of graphite to easily make useful visualizations
+    \item Adds a number of dashboards
+    \item Some projects using this to track job failure rates
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{grafana-sample.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Grafana}
-    \begin{itemize}
-        \item \href{http://grafana.openstack.org/}{http://grafana.openstack.org/}
-        \item Provides a layer on top of graphite to easily make useful visualizations
-        \item Adds a number of dashboards
-        \item Some projects using this to track job failure rates
-    \end{itemize}
+  \frametitle{ELK}
+  \begin{itemize}
+    \item Elasticsearch, Logstash, Kibana
+    \item \href{http://logstash.openstack.org}{http://logstash.openstack.org}
+    \item Provides a search engine on top of are job artifacts
+    \item Limited to 10 days of results
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.75\textwidth]{kibana-sample.png}
+  \end{center}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Elastic Recheck}
+  \begin{itemize}
+    \item Designed to answer the question ``Have you seen this recently?''
+    \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
+    \item
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{elastic-recheck-sample.png}
+  \end{center}
+\end{frame}
+
 
 \begin{frame}
     \frametitle{subunit2sql}
