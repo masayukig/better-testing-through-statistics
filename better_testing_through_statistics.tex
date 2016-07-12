@@ -173,9 +173,7 @@
 
 \begin{frame}
 \frametitle{The Size of the Gate}
-  \begin{columns}[T]
-    \begin{column}{.48\textwidth}
-      \textbf{One Proposed Change Generates:}
+    \textbf{One Proposed Change Generates:}
       \begin{itemize}
         \item 5--25 Devstacks
         \item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
@@ -188,13 +186,13 @@
         \item \textasciitilde0.01\% individual tempest test failure rate
         \item \textasciitilde.77\% tempest run failure rate
       \end{itemize}
-    \end{column}
-    \begin{column}{.48\textwidth}
-      \centering
-      \textbf{Number of Tempest Tests per Day in the Gate Queue:}
-      \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
-    \end{column}
-  \end{columns}
+\end{frame}
+
+\begin{frame}
+      \frametitle{Number of Tempest Tests per Day in the Gate Queue:}
+    \begin{center}
+      \includegraphics[width=1.0\textwidth]{tempest-gate-count.png}
+  \end{center}
 \end{frame}
 
 \subsection{Examples of Complications with the Size}
@@ -299,7 +297,7 @@
 \begin{frame}
     \frametitle{subunit2sql in OpenStack Infrastructure}
     \begin{center}
-        \includegraphics[height=1.1\textheight]{subunit2sql-collection.png}
+        \includegraphics[height=1.0\textheight]{subunit2sql-collection.png}
     \end{center}
 \end{frame}
 
@@ -315,7 +313,7 @@
 \begin{frame}
     \frametitle{OpenStack-Health Architecture}
     \begin{center}
-        \includegraphics[height=1.2\textheight]{openstack-health-arch.png}
+        \includegraphics[height=1.1\textheight]{openstack-health-arch.png}
     \end{center}
 \end{frame}
 
