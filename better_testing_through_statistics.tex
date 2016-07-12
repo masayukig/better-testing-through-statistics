@@ -154,7 +154,7 @@
 \begin{frame}
     \frametitle{What is ``the OpenStack Gate''?}
 	\begin{center}
-		\includegraphics[width=.65\textwidth]{code_review.png}
+		\includegraphics[width=.85\textwidth]{code_review.png}
 	\end{center}
 \end{frame}
 
@@ -238,7 +238,6 @@
     \item Include job results
     \item Limited to job level data
     \item Time based, can't be linked to an individual job
-    \item
   \end{itemize}
   \begin{center}
     \includegraphics[width=.65\textwidth]{graphite-sample.png}
@@ -300,9 +299,11 @@
         \item Designed to store test results data in a sql database
         \item Provides a DB schema and a python API for interacting with the
               database
+        \item CLI utilities for storing and retrieving results in the DB as subunit v2
+        \item A public database of everything with subunit output run in OpenStack-Infra
         \item Used to the results from test runs for 6 months
-        \item
     \end{itemize}
+
 \end{frame}
 
 \begin{frame}
@@ -354,7 +355,7 @@
         \item Too many varied data sources each with unique limitations
         \item Only Gate and Periodic Job data (subunit2sql)
         \item No views for infra failure (subunit2sql)
-        \item It'd difficult to get contribution from employees of companies
+        \item Limited contribution in this space
     \end{itemize}
 \end{frame}
 
@@ -363,7 +364,7 @@
     \begin{itemize}
         \item Integrate all the things in openstack-health
         \item Use the data to optimize our test runner scheduler
-        \item (Auto cause of failure detection with machine learning or something:)
+        \item Enable automation around failure detection
     \end{itemize}
 \end{frame}
 
