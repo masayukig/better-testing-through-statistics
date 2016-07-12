@@ -210,11 +210,12 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Problem/Issue}
+  \frametitle{Problems/Issues when Running in the Gate}
   \begin{itemize}
-    \item It's difficult to find a problem from the large amount of log
-    \item It's difficult to find performance regression/improvement
-    \item
+    \item Works fine for looking at results 1 at a time
+    \item Difficult to find a non-deterinistic failures
+    \item Difficult to find performance regressions
+    \item Finding out how often something passes or fails is impossible
   \end{itemize}
 \end{frame}
 
@@ -331,7 +332,6 @@
         \item Determine when it's time to skip a test
         \item Identify tests that are actually catching bugs
         \item Determine if failures are isolated to region, config, etc.
-        \item
     \end{itemize}
 \end{frame}
 
@@ -339,8 +339,11 @@
     \frametitle{Finding trends amongst the noise}
     \begin{itemize}
         \item Catch performance regressions
-        \item
+        \item Identify relational trends in the data
     \end{itemize}
+    \begin{center}
+        \includegraphics[height=.7\textheight]{Performance-Issue-o-h.png}
+    \end{center}
 \end{frame}
 
 \section{Future work/issues}
