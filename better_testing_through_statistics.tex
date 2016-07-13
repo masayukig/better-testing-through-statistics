@@ -317,9 +317,19 @@
   \frametitle{Elastic Recheck}
   \begin{itemize}
     \item Designed to answer the question ``Have you seen this recently?''
-    \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
-    \item
-  \end{itemize}
+    \item Leverages elastic search to identify failures with known fingerprints
+    \item Contains a repository of elastic-search queries with known failures
+    \item Has 2 parts:
+        \begin{itemize}
+            \item A bot which watches changes and reports identified failures to gerrit and IRC
+            \item A dashboard which shows failure categorization
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Elastic Recheck}
+    \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
   \begin{center}
     \includegraphics[width=.9\textwidth]{elastic-recheck-sample.png}
   \end{center}
