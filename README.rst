@@ -1,7 +1,8 @@
-# better_testing_through_statistics
 =================================
 Better Testing Through Statistics
 =================================
+
+Original repository: https://github.com/mtreinish/openstack-health-presentation
 
 Built with beamer latex
 
