@@ -8,9 +8,9 @@ Install texlive with most of the plugins via your distro
 
 to build just run::
 
-  % pdflatex better_testing_through_statistics-ja.tex
+  % pdflatex better_testing_through_statistics.tex
 
-the output will be better_testing_through_statistics-ja.pdf
+the output will be better_testing_through_statistics.pdf
 
 
 ====
