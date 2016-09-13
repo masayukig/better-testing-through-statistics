@@ -90,7 +90,7 @@
   }
   {Masayuki Igawa}
 }
-\date{August 30, 2016}
+\date{September 13, 2016}
 
 \title[OpenStack Upstream開発における品質管理
 \hspace{2em}\insertframenumber/\inserttotalframenumber]{OpenStack Upstream開発における品質管理}
@@ -188,11 +188,36 @@
       and initiate tools and plans to ensure the upstream stability
       and quality of OpenStack, and its release readiness at any point
       during the release cycle.}}　→ CI/CDできるように整える役割
-    \item \href{http://governance.openstack.org/reference/projects/quality-assurance.html}{１７リポジトリ (2016/7/7現在)}
-    \begin{itemize}
-      \item Tempest, DevStack, os-testr, openstack-health, stackviz, Grenade, Hacking, Bashate, etc..
-    \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Current QA Projects}
+  \href{http://governance.openstack.org/reference/projects/quality-assurance.html}{17 repositories (2016/9/13)}
+  \begin{columns}
+    \column{.45\linewidth}
+      \begin{itemize}
+          \item{devstack}
+          \item{devstack-plugin-cookiecutter}
+          \item{devstack-plugin-ceph}
+          \item{devstack-vagrant}
+          \item{grenade}
+          \item{tempest}
+          \item{tempest-lib}
+          \item{tempest-plugin-cookiecutter}
+      \end{itemize}
+    \column{.45\linewidth}
+      \begin{itemize}
+          \item{bashate}
+          \item{stackviz}
+          \item{hacking}
+          \item{eslint-config-openstack}
+          \item{os-testr}
+          \item{os-performance-tools}
+          \item{openstack-health dashboard}
+          \item{karma-subunit-reporter}
+      \end{itemize}
+  \end{columns}
 \end{frame}
 
 \section{What is ``the OpenStack Gate''?}
@@ -261,7 +286,19 @@
   \begin{itemize}
     \item 大量のログの中から目的のものを見つける必要あり
     \item 大量のテスト実行結果を俯瞰的に確認したい (パフォーマンス劣化・向上の検出等)
+    \item どのくらいの頻度で成功／失敗しているかを知ることが困難
   \end{itemize}
+\end{frame}
+
+\section{Solutions}
+\begin{frame}
+  \frametitle{一般的なアプローチ}
+    \begin{itemize}
+        \item より大きな視点で、大局的に物事を見る
+        \item 統計情報やデータマイニングをして、未知の傾向を見つけ出す
+        \item テスト実行結果をオープンにして、誰もが見られるようにする
+        \item 全ての情報にアクセスできるAPIを確保する
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -306,13 +343,22 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Elastic Recheck}
+  \frametitle{openstack-health}
   \begin{itemize}
-    \item 「このエラー前にも起きたよね？」を自動的に検出する
-    \item \href{http://status.openstack.org/elastic-recheck/}{status.openstack.org/elastic-recheck}
+    \item \href{http://status.openstack.org/openstack-health/}{status.openstack.org/openstack-health}
+    \item ゲートの実行結果データをアクセスできるダッシュボードとして開発開始
+    \item subunit2sqlとelastic recheckのデータと連携
   \end{itemize}
   \begin{center}
-    \includegraphics[width=.9\textwidth]{elastic-recheck-sample.png}
+    \includegraphics[height=0.6\textheight]{openstack-health-1.png}
+    \includegraphics[height=0.6\textheight]{openstack-health-2.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{OpenStack-Health Architecture}
+  \begin{center}
+    \includegraphics[height=1.2\textheight]{openstack-health-arch.png}
   \end{center}
 \end{frame}
 
@@ -334,22 +380,18 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{openstack-health}
+  \frametitle{Elastic Recheck}
   \begin{itemize}
-    \item \href{http://status.openstack.org/openstack-health/}{status.openstack.org/openstack-health}
-    \item ゲートの実行結果データをアクセスできるダッシュボードとして開発開始
-    \item subunit2sqlとelastic recheckのデータと連携
+    \item 「このエラー前にも起きたよね？」を自動的に検出する
+    \item \href{http://status.openstack.org/elastic-recheck/}{status.openstack.org/elastic-recheck}
+    \item 以下の２つで構成:
+      \begin{itemize}
+        \item ボット： 変更・レポートを監視して、失敗を検知してGerrit/IRCへ通知
+        \item ダッシュボード： 失敗をカテゴライズしたものを表示
+      \end{itemize}
   \end{itemize}
   \begin{center}
-    \includegraphics[height=0.6\textheight]{openstack-health-1.png}
-    \includegraphics[height=0.6\textheight]{openstack-health-2.png}
-  \end{center}
-\end{frame}
-
-\begin{frame}
-  \frametitle{OpenStack-Health Architecture}
-  \begin{center}
-    \includegraphics[height=1.2\textheight]{openstack-health-arch.png}
+    \includegraphics[width=.9\textwidth]{elastic-recheck-sample.png}
   \end{center}
 \end{frame}
 
@@ -384,7 +426,7 @@
     \item Job実行結果を俯瞰的に視覚化するにより、パフォーマンス劣化・改善を確認することができた
   \end{itemize}
   \begin{center}
-    \includegraphics[width=1.1\textheight]{openstack-health-test_volume_boot_pattern.png}
+    \includegraphics[width=1.1\textheight]{Performance-Issue-o-h.png}
   \end{center}
 \end{frame}
 
@@ -395,7 +437,6 @@
     \item 非常に多くの種類のデータ・制限があり、効果的な見せ方が難しい
     \item GateとPeriodicジョブのデータしか保持していない (subunit2sql/openstack-health)
     \item インフラに起因するエラーが対象外 (subunit2sql/openstack-health)
-    \item 企業に所属する開発者のコントリビューションが得られにくい
   \end{itemize}
 \end{frame}
 
@@ -410,6 +451,7 @@
       \item 単体テストカバレッジ推移
     \end{itemize}
     \item 各種UIの改善
+    \item 失敗検知の自動化
     \item QAプロジェクトの宣伝
   \end{itemize}
 \end{frame}
