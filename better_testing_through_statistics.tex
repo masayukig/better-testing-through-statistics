@@ -121,19 +121,26 @@
 
 \begin{frame}
 \frametitle{The Size of the Gate}
-    \textbf{One Proposed Change Generates:}
-      \begin{itemize}
-        \item 5--25 Devstacks
-        \item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
-        \item \textasciitilde151 2nd level guests created in each devstack cloud
-        \item \textasciitilde1 GB of logs uncompressed for each run
-      \end{itemize}
-      \textbf{In aggregate:}
-      \begin{itemize}
-        \item \textasciitilde12,500 jobs run in check and gate daily
-        \item \textasciitilde0.01\% individual tempest test failure rate
-        \item \textasciitilde.77\% tempest run failure rate
-      \end{itemize}
+    \begin{columns}
+        \begin{column}{.48\textwidth}
+            \textbf{One Proposed Change Generates:}
+            \begin{itemize}
+                \item 5--25 Devstacks
+                \item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
+                \item \textasciitilde151 2nd level guests created in each devstack cloud
+                \item \textasciitilde1 GB of logs uncompressed for each run
+            \end{itemize}
+            \textbf{In aggregate:}
+            \begin{itemize}
+                \item \textasciitilde12,500 jobs run in check and gate daily
+                \item \textasciitilde0.01\% individual tempest test failure rate
+                \item \textasciitilde.77\% tempest run failure rate
+            \end{itemize}
+        \end{column}
+        \begin{column}{.48\textwidth}
+            \includegraphics[width=\textwidth]{zuul_all_jobs.png}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -165,6 +172,15 @@
     \item Difficult to find performance regressions
     \item Finding out how often something passes or fails is next to impossible
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Runtime variance}
+    \begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{runtime_variance.png}
+    \end{center}
+    \end{figure}
 \end{frame}
 
 \section{Solutions}
