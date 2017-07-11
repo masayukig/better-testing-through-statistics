@@ -62,7 +62,7 @@
             \column{.45\linewidth}
             \centering
             Matthew Treinish\\
-            Open Source Developer Advocate - IBM
+            Open Source Developer Advocate\\ IBM\\
             \href{mailto:mtreinish@kortar.org}{mtreinish@kortar.org}\\
         \texttt{mtreinish on Freenode}
         \column{.45\linewidth}
@@ -155,7 +155,7 @@
   \frametitle{Log Server}
   \begin{itemize}
     \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
-    \item Archive of all artifacts from all jobs for \textasciitilde4 months
+    \item Archive of all artifacts from all jobs for \textasciitilde3 months
 %http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=717&rra_id=all
     \item \textasciitilde8 TB of data compressed
   \end{itemize}
@@ -257,12 +257,6 @@
 %  \end{columns}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Using OpenStack Health}
-    \begin{center}
-        \includegraphics[height=.9\textheight]{HomePage.png}
-    \end{center}
-\end{frame}
 
 \begin{frame}
     \frametitle{openstack-health}
@@ -281,6 +275,23 @@
 \end{frame}
 
 \begin{frame}
+    \frametitle{Using OpenStack Health}
+    \begin{center}
+        \includegraphics[height=.9\textheight]{HomePage.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \includegraphics[height=\textheight]{o-h_main_graphs.png}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \includegraphics[height=\textheight]{o-h-project_fails.png}
+\end{frame}
+
+\begin{frame}
     \frametitle{subunit2sql}
     \begin{itemize}
         \item Designed to store test results data in a sql database
@@ -293,12 +304,12 @@
 
 \end{frame}
 
-\begin{frame}
-    \frametitle{subunit2sql in OpenStack Infrastructure}
-    \begin{center}
-        \includegraphics[height=1.0\textheight]{subunit2sql-collection.png}
-    \end{center}
-\end{frame}
+%\begin{frame}
+%    \frametitle{subunit2sql in OpenStack Infrastructure}
+%    \begin{center}
+%        \includegraphics[height=1.0\textheight]{subunit2sql-collection.png}
+%    \end{center}
+%\end{frame}
 
 \begin{frame}
   \frametitle{Elastic Recheck}
@@ -331,6 +342,11 @@
         \item Identify tests that are actually catching bugs
         \item Determine if failures are isolated to region, config, etc.
     \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Figuring out if a bugfix worked}
+    \includegraphics[width=\textwidth]{e-r_fixed_bug.png}
 \end{frame}
 
 \begin{frame}
